@@ -89,11 +89,96 @@ function App() {
     const [decodeKey, setDecodeKey] = useState('')
     const [encodeKey, setEncodeKey] = useState('')
 
+    const onChangeDecodeKey = (value) => {
+        setDecodeKey(value)
+        matrix_num_code(value, key)
+    }
+
+    const onChangeEncodeKey = (value) => {
+        setEncodeKey(value)
+        matrix_num_decode(value, key)
+    }
+
+    function matrix_num_code(message, keyValue){
+        const codingArray = [];
+
+        let keyString = "" + keyValue;
+
+        let key1 = [];
+        for(let i=0; i < keyString.length;i++)
+            key1.push(keyString[i])
+
+        for (let i = 0; i < key1.length; i++) {
+            codingArray[i] = []
+        }
+        let deep = (message.length/key1.length);
+
+        for (let j = 0; j < deep; j++) {
+            for (let i = 0; i < key1.length; i++) {
+                const charToSave = message[i+(4*j)]
+                if(charToSave !== undefined){
+                    codingArray[i][j] = charToSave;
+                }
+            }
+        }
+        let result = ""
+        for (let j = 0; j < deep; j++) {
+            for (let i = 0; i < key1.length; i++) {
+                const element = codingArray[key1[i]-1][j];
+                if(element !== undefined){
+                    result = result+element;
+                }
+            }
+        }
+        setEncodeKey(result);
+    }
+
+    function matrix_num_decode(message, keyValue){
+        const codingArray = [];
+
+        let keyString = "" + keyValue;
+
+        let key1 = [];
+        for(let i=0; i < keyString.length;i++)
+            key1.push(keyString[i])
+
+        for (let i = 0; i < key1.length; i++) {
+            codingArray[i] = []
+        }
+        let deep = (message.length/key1.length);
+        for (let j = 0; j < deep; j++) {
+            for (let i = 0; i < key1.length; i++) {
+                const charToSave = message[i+(4*j)]
+                if(charToSave !== undefined){
+                    codingArray[i][j] = charToSave;
+                }
+            }
+        }
+
+        key1.reverse();
+        let result = ""
+        let k = 0;
+        for (let j = 0; j < deep; j++) {
+            for (let i = 0; i < key1.length-k; i++) {
+                let element = codingArray[key1[i]-1][j];
+                if(element !== undefined){
+                    result = result+element;
+                } else {
+                    while(element === undefined){
+                        k++;
+                        element = codingArray[key1[i]-1-k][j];
+                    }
+                    result = result+element;
+                }
+            }
+        }
+        setDecodeKey(result)
+    }
+
+
     const [signature, setSignature] = useState('signature')
     const [decodeSignature, setDecodeSignature] = useState('')
     const [encodeSignature, setEncodeSignature] = useState('')
-
-
 
     return (
         <Container>
@@ -184,6 +269,8 @@ function App() {
                                     <textarea className="form-control"
                                               rows="5"
                                               value={encodeKey}
+                                              onChange={(e) => onChangeEncodeKey(e.target.value)}
+
                                     />
                                 </div>
                             </Col>
@@ -193,6 +280,7 @@ function App() {
                                     <textarea className="form-control"
                                               rows="5"
                                               value={decodeKey}
+                                              onChange={(e) => onChangeDecodeKey(e.target.value)}
                                     />
                                 </div>
                             </Col>
