@@ -180,11 +180,103 @@ function App() {
     const [decodeSignature, setDecodeSignature] = useState('')
     const [encodeSignature, setEncodeSignature] = useState('')
 
+    const onChangeDecodeSignature = (value) => {
+        setDecodeSignature(value)
+        code_zad3(value, signature)
+    }
+
+    const onChangeEncodeSignature = (value) => {
+        setEncodeSignature(value)
+        console.log(value)
+        console.log(signature)
+        decode_zad3(value, signature)
+    }
+
+    function creatingTitlebarOfArray(sortedKeyArray, mainKeyArray){
+        let index = 1;
+        sortedKeyArray.forEach((element) => {
+            let mainKeyCharacter = mainKeyArray.find(mainElement =>
+                mainElement.letter == element && !mainElement.if_was
+            )
+            mainKeyCharacter.index = index;
+            mainKeyCharacter.if_was = true;
+            index++;
+        });
+    }
+
+    function createMainKeyObjectArray(key){
+        return key.split("").map( (element) => {
+            return {
+                letter: element,
+                if_was: false
+            }
+        });
+    }
+
+    function code_zad3(message, key){
+        message = message.replace(/\s/g, "").split("")
+        let sortedKeyArray = key.split("").sort()
+        let mainKeyArray = createMainKeyObjectArray(key)
+        creatingTitlebarOfArray(sortedKeyArray, mainKeyArray)
+
+        const message_length_without_spaces = message.length;
+        const rows_j = message_length_without_spaces/key.length
+
+        for(let j = 0; j < rows_j; j++){
+            for(let i = 0; i < key.length; i++){
+                if(mainKeyArray[i].message_part === undefined)
+                    mainKeyArray[i].message_part = []
+                let charToAdd = message[j*key.length+i]
+                if(charToAdd !== undefined)
+                    mainKeyArray[i].message_part.push(charToAdd)
+            }
+        }
+        mainKeyArray.forEach((el) => el.if_was = false)
+        let result = ""
+        sortedKeyArray.forEach((element) => {
+            let mainKeyCharacter = mainKeyArray.find(mainElement =>
+                mainElement.letter == element && !mainElement.if_was
+            )
+            mainKeyCharacter.if_was = true;
+            result += mainKeyCharacter.message_part.join("")+ " "
+        });
+        setEncodeSignature(result.trim())
+    }
+
+    function decode_zad3(message, key){
+        let sortedKeyArray = key.split("").sort()
+        let mainKeyArray = createMainKeyObjectArray(key)
+        creatingTitlebarOfArray(sortedKeyArray, mainKeyArray)
+        console.log(mainKeyArray)
+
+        let splittedMessage = message.split(" ");
+
+        for(let i=0; i < mainKeyArray.length; i++){
+            let mainKeyCharacter = mainKeyArray[i];
+            mainKeyCharacter.message_part = splittedMessage[mainKeyCharacter.index-1]
+        }
+        console.log(mainKeyArray)
+        let result = ""
+
+        const message_length_without_spaces = message.length;
+        const rows_j = message_length_without_spaces/key.length
+
+        for(let j = 0; j < rows_j; j++){
+            for(let i = 0; i < key.length; i++){
+                let characterToSave = mainKeyArray[i].message_part.charAt(j)
+                result+=characterToSave
+            }
+        }
+
+        setDecodeSignature(result.trim())
+
+    }
+
     return (
         <Container>
-            <Card className="mt-3">
+            <Card className="mt-3" style={{background : "#C0C0C0"}}>
                 <Container className="p-5">
-                    <Card>
+                    <Card style={{boxShadow : "10px 10px #808080"}}>
                         <Stack className="pt-4">
                             <h2 className="d-flex justify-content-center">RAIL FENCE</h2>
                         </Stack>
@@ -237,7 +329,7 @@ function App() {
                 </Container>
 
                 <Container className="p-5">
-                    <Card>
+                    <Card style={{boxShadow : "10px 10px #808080"}}>
                         <Stack className="pt-4">
                             <h2 className="d-flex justify-content-center">MATERIAL ARRANGEMENTS</h2>
                         </Stack>
@@ -289,7 +381,7 @@ function App() {
                 </Container>
 
                 <Container className="p-5">
-                    <Card>
+                    <Card style={{boxShadow : "10px 10px #808080"}}>
                         <Stack className="pt-4">
                             <h2 className="d-flex justify-content-center">MATERIAL ARRANGEMENTS</h2>
                         </Stack>
@@ -321,6 +413,7 @@ function App() {
                                     <textarea className="form-control"
                                               rows="5"
                                               value={encodeSignature}
+                                              onChange={(e) => onChangeEncodeSignature(e.target.value)}
                                     />
                                 </div>
                             </Col>
@@ -330,6 +423,7 @@ function App() {
                                     <textarea className="form-control"
                                               rows="5"
                                               value={decodeSignature}
+                                              onChange={(e) => onChangeDecodeSignature(e.target.value)}
                                     />
                                 </div>
                             </Col>
