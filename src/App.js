@@ -24,10 +24,12 @@ function App() {
     function rail_fence_code(value, size){
         const codingArray = [];
 
+        // initialize arrays
         for (let i = 0; i < value.length; i++) {
             codingArray[i] = []
         }
-
+        
+        // saving characters in diagonally way to matrix
         let if_up = true;
         for (let i = 0; i < value.length;) {
             for (let j = 0; j < size; i++) {
@@ -40,6 +42,7 @@ function App() {
             }
         }
 
+        // reading based on rows from up to down
         let result = ""
         for (let j = 0; j < size; j++) {
             for (let i = 0; i < value.length;i++) {
@@ -58,6 +61,8 @@ function App() {
         if(ciphertext.length < 1){
             return;
         }
+
+        // recovering previous matrix like in coding
         let key = parseInt(size);
         if(key > Math.floor(2*(ciphertext.length-1))){
             return; }
@@ -75,8 +80,10 @@ function App() {
             }
         }
 
+        // converting to characters 
         for(let i=line; i<ciphertext.length; i+=2*(key-1)) pt[i] = ciphertext.charAt(k++);
 
+        // setting decoded string
         let result = '';
         for(let i=0; i < pt.length; i++){
             result += pt[i];
@@ -104,23 +111,28 @@ function App() {
 
         let keyString = "" + keyValue;
 
+        // making array from string which contains numbers
         let key1 = [];
         for(let i=0; i < keyString.length;i++)
             key1.push(keyString[i])
-
+        
+        // intializing arrays
         for (let i = 0; i < key1.length; i++) {
             codingArray[i] = []
         }
+        
+        // filling the matrix
         let deep = (message.length/key1.length);
-
         for (let j = 0; j < deep; j++) {
             for (let i = 0; i < key1.length; i++) {
-                const charToSave = message[i+(4*j)]
+                const charToSave = message[i+(key.length*j)]
                 if(charToSave !== undefined){
                     codingArray[i][j] = charToSave;
                 }
             }
         }
+
+        // saving characters from particular columns in given order
         let result = ""
         for (let j = 0; j < deep; j++) {
             for (let i = 0; i < key1.length; i++) {
@@ -138,32 +150,39 @@ function App() {
 
         let keyString = "" + keyValue;
 
+        // making array from string which contains numbers
         let key1 = [];
         for(let i=0; i < keyString.length;i++)
             key1.push(keyString[i])
 
+        // intializing arrays
         for (let i = 0; i < key1.length; i++) {
             codingArray[i] = []
         }
+
+        // filling the matrix
         let deep = (message.length/key1.length);
         for (let j = 0; j < deep; j++) {
             for (let i = 0; i < key1.length; i++) {
-                const charToSave = message[i+(4*j)]
+                const charToSave = message[i+(key.length*j)]
                 if(charToSave !== undefined){
                     codingArray[i][j] = charToSave;
                 }
             }
         }
 
+        // reserving key order
         key1.reverse();
         let result = ""
         let k = 0;
+        // using key reading characters to result
         for (let j = 0; j < deep; j++) {
             for (let i = 0; i < key1.length-k; i++) {
                 let element = codingArray[key1[i]-1][j];
                 if(element !== undefined){
                     result = result+element;
                 } else {
+                    // made on case when matrix is not fully filled
                     while(element === undefined){
                         k++;
                         element = codingArray[key1[i]-1-k][j];
@@ -192,6 +211,7 @@ function App() {
         decode_zad3(value, signature)
     }
 
+    // creating number order based on key
     function creatingTitlebarOfArray(sortedKeyArray, mainKeyArray){
         let index = 1;
         sortedKeyArray.forEach((element) => {
@@ -203,7 +223,7 @@ function App() {
             index++;
         });
     }
-
+    // making array contains objects
     function createMainKeyObjectArray(key){
         return key.split("").map( (element) => {
             return {
@@ -214,14 +234,18 @@ function App() {
     }
 
     function code_zad3(message, key){
+        // clearing message from spaces and making it into array and sort
         message = message.replace(/\s/g, "").split("")
         let sortedKeyArray = key.split("").sort()
+        
+        // creating number order based on key
         let mainKeyArray = createMainKeyObjectArray(key)
         creatingTitlebarOfArray(sortedKeyArray, mainKeyArray)
 
         const message_length_without_spaces = message.length;
         const rows_j = message_length_without_spaces/key.length
 
+        // setting parts of coded message to columns in matrix
         for(let j = 0; j < rows_j; j++){
             for(let i = 0; i < key.length; i++){
                 if(mainKeyArray[i].message_part === undefined)
@@ -232,6 +256,8 @@ function App() {
             }
         }
         mainKeyArray.forEach((el) => el.if_was = false)
+
+        // saving result from set matrix in order of number key generated by string key
         let result = ""
         sortedKeyArray.forEach((element) => {
             let mainKeyCharacter = mainKeyArray.find(mainElement =>
@@ -244,23 +270,28 @@ function App() {
     }
 
     function decode_zad3(message, key){
+
+        // begginning same like in coding
         let sortedKeyArray = key.split("").sort()
         let mainKeyArray = createMainKeyObjectArray(key)
         creatingTitlebarOfArray(sortedKeyArray, mainKeyArray)
         console.log(mainKeyArray)
 
+        // message splitted on parts by spaces given in input
         let splittedMessage = message.split(" ");
 
+        // matching parts of coded message with particular columns in matrix
+        // like in the coding function
         for(let i=0; i < mainKeyArray.length; i++){
             let mainKeyCharacter = mainKeyArray[i];
             mainKeyCharacter.message_part = splittedMessage[mainKeyCharacter.index-1]
         }
-        console.log(mainKeyArray)
-        let result = ""
-
+        
         const message_length_without_spaces = message.length;
         const rows_j = message_length_without_spaces/key.length
-
+        
+        // saving decoded message from made simple matrix
+        let result = ""
         for(let j = 0; j < rows_j; j++){
             for(let i = 0; i < key.length; i++){
                 let characterToSave = mainKeyArray[i].message_part.charAt(j)
