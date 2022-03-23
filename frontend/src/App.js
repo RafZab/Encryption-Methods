@@ -125,7 +125,7 @@ function App() {
         let deep = (message.length/key1.length);
         for (let j = 0; j < deep; j++) {
             for (let i = 0; i < key1.length; i++) {
-                const charToSave = message[i+(key.length*j)]
+                const charToSave = message[i+(key1.length*j)]
                 if(charToSave !== undefined){
                     codingArray[i][j] = charToSave;
                 }
@@ -164,7 +164,7 @@ function App() {
         let deep = (message.length/key1.length);
         for (let j = 0; j < deep; j++) {
             for (let i = 0; i < key1.length; i++) {
-                const charToSave = message[i+(key.length*j)]
+                const charToSave = message[i+(key1.length*j)]
                 if(charToSave !== undefined){
                     codingArray[i][j] = charToSave;
                 }
