@@ -1,7 +1,10 @@
 import {Card, Col, Container, Row, Stack} from "react-bootstrap";
 import {useState} from "react";
+import axios from "axios";
 
 function App() {
+
+    // BSK2
     const [matrixSize, setMatrixSize] = useState(2)
     const [decodeRail, setDecodeRail] = useState('')
     const [encodeRail, setEncodeRail] = useState('')
@@ -303,6 +306,39 @@ function App() {
 
     }
 
+    // BSK3
+
+    const [trial, setTrial] = useState(7)
+    const [polynomial, setPolynomial] = useState('10101')
+    const [seed, setSeed] = useState('101100')
+    const [resultLFSR, setResultLFSR] = useState('')
+
+    const onChangeSeed = (value) => {
+        setSeed(value)
+        generateRandomNumber(value)
+    }
+
+    const generateRandomNumber = (seedValue) => {
+        const polynomialTable = []
+        const seedTable = []
+
+        for(let i = 1; i > polynomial.length; i++)
+            polynomialTable.push(polynomial[i])
+
+        for(let i = 1; i > seedValue.length; i++)
+            seedTable.push(seedValue[i])
+
+        axios.get('http://localhost:8080/api/v1/generator/random', {
+            trial: trial,
+            polynomial: polynomialTable,
+            seed: seedTable
+        }).then((response) => {
+            setResultLFSR(response.data)
+            }).catch(function (error) {
+            console.log(error);
+        });
+    }
+
     return (
         <Container>
             <Card className="mt-3" style={{background : "#C0C0C0"}}>
@@ -455,6 +491,74 @@ function App() {
                                               rows="5"
                                               value={decodeSignature}
                                               onChange={(e) => onChangeDecodeSignature(e.target.value)}
+                                    />
+                                </div>
+                            </Col>
+                        </Row>
+                    </Card>
+                </Container>
+
+                <Container className="p-5">
+                    <Card style={{boxShadow : "10px 10px #808080"}}>
+                        <Stack className="pt-4">
+                            <h2 className="d-flex justify-content-center">PSEUDOLOSE NUMBER GENERATOR</h2>
+                        </Stack>
+                        <hr/>
+                        <Row>
+                            <Col className="d-flex justify-content-center m-5">
+                                <div className="row g-3 align-items-center">
+                                    <div className="col-auto">
+                                        <label htmlFor="input2" className="col-form-label">Trial</label>
+                                    </div>
+                                    <div className="col-auto">
+                                        <input type="number" id="input2" className="form-control"
+                                               value={trial}
+                                               onChange={(e) => setTrial(e.target.value)}
+                                               min="1" max="9999999" step="1" aria-describedby="helpInline2"/>
+                                    </div>
+                                    <div className="col-auto">
+                                <span id="helpInline2" className="form-text">
+                                  Must be number in between 1-9999999.
+                                </span>
+                                    </div>
+                                </div>
+                                <div className="row g-3 align-items-center ps-2">
+                                    <div className="col-auto">
+                                        <label htmlFor="input2" className="col-form-label">Polynomial</label>
+                                    </div>
+                                    <div className="col-auto">
+                                        <input type="number" id="input2" className="form-control"
+                                               value={polynomial}
+                                               onChange={(e) => setPolynomial(e.target.value)}
+                                               min="1" max="9999999" step="1" aria-describedby="helpInline2"/>
+                                    </div>
+                                    <div className="col-auto">
+                                <span id="helpInline2" className="form-text">
+                                  Must be number x+x^3+x^5 = 10101.
+                                </span>
+                                    </div>
+                                </div>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <div className="m-3">
+                                    <h3>Result</h3>
+                                    <textarea className="form-control"
+                                              readOnly="true"
+                                              rows="5"
+                                              value={resultLFSR}
+
+                                    />
+                                </div>
+                            </Col>
+                            <Col>
+                                <div className="m-3">
+                                    <h3>Seed</h3>
+                                    <textarea className="form-control"
+                                              rows="5"
+                                              value={seed}
+                                              onChange={(e) => onChangeSeed(e.target.value)}
                                     />
                                 </div>
                             </Col>

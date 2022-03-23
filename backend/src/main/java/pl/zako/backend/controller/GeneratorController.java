@@ -1,9 +1,9 @@
 package pl.zako.backend.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import pl.zako.backend.DTO.Generator;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 @RestController("/api/v1")
 public class GeneratorController {
 
@@ -16,7 +16,7 @@ public class GeneratorController {
 //        boolean[] seed = {_0, _1, _1, _0};
         boolean[] polynomial = aGenerator.getPolynomial();
         boolean[] seed = aGenerator.getSeed();
-        return code(7, polynomial, seed);
+        return code(aGenerator.getTrial(), polynomial, seed);
     }
 
     private static boolean[] code(int aTrials, boolean[] aPolynomial, boolean[] aSeed) {
