@@ -322,17 +322,20 @@ function App() {
         const polynomialTable = []
         const seedTable = []
 
-        for(let i = 1; i > polynomial.length; i++)
-            polynomialTable.push(polynomial[i])
+        for(let i = 0; i < polynomial.length; i++)
+            polynomialTable.push(+polynomial[i])
 
-        for(let i = 1; i > seedValue.length; i++)
-            seedTable.push(seedValue[i])
+        for(let i = 0; i < seedValue.length; i++)
+            seedTable.push(+seedValue[i])
 
-        axios.get('http://localhost:8080/api/v1/generator/random', {
-            trial: trial,
-            polynomial: polynomialTable,
-            seed: seedTable
-        }).then((response) => {
+        const requestBody =
+            {
+                trial: trial,
+                polynomial: polynomialTable,
+                seed: seedTable
+            }
+
+        axios.post('http://localhost:8080/generator/random', requestBody).then((response) => {
             setResultLFSR(response.data)
             }).catch(function (error) {
             console.log(error);

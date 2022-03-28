@@ -1,10 +1,22 @@
 package pl.zako.backend.DTO;
 
+import lombok.Data;
 
+@Data
 public class GeneratorBSK {
     int trial;
     boolean[] polynomial;
     boolean[] seed;
+
+    public GeneratorBSK(){
+
+    }
+
+    public GeneratorBSK(int trial, boolean[] polynomial, boolean[] seed ){
+        this.polynomial = polynomial;
+        this.seed = seed;
+        this.trial = trial;
+    }
 
     public static boolean[] code(int aTrials, boolean[] aPolynomial, boolean[] aSeed) {
         int n = aSeed.length;
