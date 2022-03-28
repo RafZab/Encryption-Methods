@@ -1,25 +1,12 @@
-package pl.zako.backend.controller;
+package pl.zako.backend.DTO;
 
-import org.springframework.web.bind.annotation.*;
-import pl.zako.backend.DTO.Generator;
 
-@CrossOrigin(origins = "*")
-@RestController("/api/v1")
-public class GeneratorController {
+public class GeneratorBSK {
+    int trial;
+    boolean[] polynomial;
+    boolean[] seed;
 
-     public static final boolean _1 = true;
-     public static final boolean _0 = false;
-
-    @GetMapping("/generator/random")
-    public boolean[] getPseudoGeneratedArray(@RequestBody Generator aGenerator){
-//        boolean[] polynomial = {_1, _0, _0, _1};
-//        boolean[] seed = {_0, _1, _1, _0};
-        boolean[] polynomial = aGenerator.getPolynomial();
-        boolean[] seed = aGenerator.getSeed();
-        return code(aGenerator.getTrial(), polynomial, seed);
-    }
-
-    private static boolean[] code(int aTrials, boolean[] aPolynomial, boolean[] aSeed) {
+    public static boolean[] code(int aTrials, boolean[] aPolynomial, boolean[] aSeed) {
         int n = aSeed.length;
         boolean[] afterTransferSeed = new boolean[aSeed.length];
 
@@ -51,5 +38,33 @@ public class GeneratorController {
         for (int i = 0; i < aSeed.length; i++) {
             aSeed[i] = afterTransferSeed[i];
         }
+    }
+
+    public static boolean[] code(GeneratorBSK aGeneratorBSK) {
+        return code(aGeneratorBSK.getTrial(), aGeneratorBSK.getPolynomial(), aGeneratorBSK.getSeed());
+    }
+
+    public int getTrial() {
+        return trial;
+    }
+
+    public void setTrial(int trial) {
+        this.trial = trial;
+    }
+
+    public boolean[] getPolynomial() {
+        return polynomial;
+    }
+
+    public void setPolynomial(boolean[] polynomial) {
+        this.polynomial = polynomial;
+    }
+
+    public boolean[] getSeed() {
+        return seed;
+    }
+
+    public void setSeed(boolean[] seed) {
+        this.seed = seed;
     }
 }
