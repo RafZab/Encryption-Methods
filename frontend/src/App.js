@@ -209,8 +209,6 @@ function App() {
 
     const onChangeEncodeSignature = (value) => {
         setEncodeSignature(value)
-        console.log(value)
-        console.log(signature)
         decode_zad3(value, signature)
     }
 
@@ -338,6 +336,69 @@ function App() {
         axios.post('http://localhost:8080/generator/random', requestBody).then((response) => {
             setResultLFSR(response.data)
             }).catch(function (error) {
+            console.log(error);
+        });
+    }
+
+    const [trialCode, setTrialCode] = useState(5)
+    const [polynomialCode, setPolynomialCode] = useState('10101')
+    const [seedCode, setSeedCode] = useState('101100')
+    const [decodeSignatureCodeSTREAM, setDecodeSignatureCodeSTREAM] = useState('Hello')
+    const [encodeSignatureCodeSTREAM, setEncodeSignatureCodeSTREAM] = useState('')
+
+    const onChangeDecodeSignatureCodeSTREAM = (value) => {
+        setDecodeSignatureCodeSTREAM(value)
+        code_BSK3_zad3(value)
+    }
+
+    const onChangeEncodeSignatureCodeSTREAM = (value) => {
+        setEncodeSignatureCodeSTREAM(value)
+        encode_BSK3_zad3(value)
+    }
+
+    function code_BSK3_zad3(message) {
+        const polynomialTable = []
+        const seedTable = []
+
+        for(let i = 0; i < polynomialCode.length; i++)
+            polynomialTable.push(+polynomialCode[i])
+
+        for(let i = 0; i < seedCode.length; i++)
+            seedTable.push(+seedCode[i])
+
+        const requestBody =
+            {
+                trial: trialCode,
+                polynomial: polynomialTable,
+                seed: seedTable
+            }
+        axios.post('http://localhost:8080/stream/encode/' + message, requestBody).then((response) => {
+            setEncodeSignatureCodeSTREAM(response.data)
+        }).catch(function (error) {
+            console.log(error);
+        });
+    }
+
+    function encode_BSK3_zad3(message) {
+        const polynomialTable = []
+        const seedTable = []
+
+        for(let i = 0; i < polynomialCode.length; i++)
+            polynomialTable.push(+polynomial[i])
+
+        for(let i = 0; i < seedCode.length; i++)
+            seedTable.push(+seedCode[i])
+
+        const requestBody =
+            {
+                trial: trialCode,
+                polynomial: polynomialTable,
+                seed: seedTable
+            }
+
+        axios.post('http://localhost:8080/stream/decode/' + message, requestBody).then((response) => {
+            setDecodeSignatureCodeSTREAM(response.data)
+        }).catch(function (error) {
             console.log(error);
         });
     }
@@ -562,6 +623,86 @@ function App() {
                                               rows="5"
                                               value={seed}
                                               onChange={(e) => onChangeSeed(e.target.value)}
+                                    />
+                                </div>
+                            </Col>
+                        </Row>
+                    </Card>
+                </Container>
+
+                <Container className="p-5">
+                    <Card style={{boxShadow : "10px 10px #808080"}}>
+                        <Stack className="pt-4">
+                            <h2 className="d-flex justify-content-center">STREAM CODE</h2>
+                        </Stack>
+                        <hr/>
+                        <Row>
+                            <Col className="d-flex justify-content-center m-5">
+                                <div className="row g-3 align-items-center">
+                                    <div className="col-auto">
+                                        <label htmlFor="input2" className="col-form-label">Trial</label>
+                                    </div>
+                                    <div className="col-auto">
+                                        <input type="number" id="input2" className="form-control"
+                                               value={trialCode}
+                                               onChange={(e) => setTrialCode(e.target.value)}
+                                               min="1" max="9999999" step="1" aria-describedby="helpInline2"/>
+                                    </div>
+                                    <div className="col-auto">
+                                <span id="helpInline2" className="form-text">
+                                  Must be number in between 1-9999999.
+                                </span>
+                                    </div>
+                                </div>
+                                <div className="row g-3 align-items-center ps-2">
+                                    <div className="col-auto">
+                                        <label htmlFor="input2" className="col-form-label">Polynomial</label>
+                                    </div>
+                                    <div className="col-auto">
+                                        <input type="number" id="input2" className="form-control"
+                                               value={polynomialCode}
+                                               onChange={(e) => setPolynomialCode(e.target.value)}
+                                               min="1" max="9999999" step="1" aria-describedby="helpInline2"/>
+                                    </div>
+                                    <div className="col-auto">
+                                <span id="helpInline2" className="form-text">
+                                  Must be number x+x^3+x^5 = 10101.
+                                </span>
+                                    </div>
+                                </div>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <div className="m-3">
+                                    <h3>Seed</h3>
+                                    <textarea className="form-control"
+                                              rows="5"
+                                              value={seedCode}
+                                              onChange={(e) => setSeedCode(e.target.value)}
+                                    />
+                                </div>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <div className="m-3">
+                                    <h3>Encoded</h3>
+                                    <textarea className="form-control"
+                                              rows="5"
+                                              value={encodeSignatureCodeSTREAM}
+                                              onChange={(e) => onChangeEncodeSignatureCodeSTREAM(e.target.value)}
+
+                                    />
+                                </div>
+                            </Col>
+                            <Col>
+                                <div className="m-3">
+                                    <h3>Decoded</h3>
+                                    <textarea className="form-control"
+                                              rows="5"
+                                              value={decodeSignatureCodeSTREAM}
+                                              onChange={(e) => onChangeDecodeSignatureCodeSTREAM(e.target.value)}
                                     />
                                 </div>
                             </Col>
