@@ -3,16 +3,16 @@ package pl.zako.backend.DTO;
 import lombok.Data;
 
 @Data
-public class GeneratorBSK {
+public class GeneratorBskDto {
     int trial;
     boolean[] polynomial;
     boolean[] seed;
 
-    public GeneratorBSK(){
+    public GeneratorBskDto(){
 
     }
 
-    public GeneratorBSK(int trial, boolean[] polynomial, boolean[] seed ){
+    public GeneratorBskDto(int trial, boolean[] polynomial, boolean[] seed ){
         this.polynomial = polynomial;
         this.seed = seed;
         this.trial = trial;
@@ -52,8 +52,8 @@ public class GeneratorBSK {
         }
     }
 
-    public static boolean[] code(GeneratorBSK aGeneratorBSK) {
-        return code(aGeneratorBSK.getTrial(), aGeneratorBSK.getPolynomial(), aGeneratorBSK.getSeed());
+    public static boolean[] code(GeneratorBskDto aGeneratorBskDto) {
+        return code(aGeneratorBskDto.getTrial(), aGeneratorBskDto.getPolynomial(), aGeneratorBskDto.getSeed());
     }
 
     public int getTrial() {
