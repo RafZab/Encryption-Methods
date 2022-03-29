@@ -10,15 +10,15 @@ public class GeneratorBSK {
         int n = aSeed.length;
         boolean[] afterTransferSeed = new boolean[aSeed.length];
 
-        boolean finalXor;
+        boolean newBit;
         boolean[] result = new boolean[aTrials];
 
         for (int t = 0; t < aTrials; t++) {
-            finalXor = countingXor(aPolynomial, aSeed);
+            newBit = countingXorForNewGeneratedBit(aPolynomial, aSeed);
             for (int i = 0; i < n-1; i++) {
                 afterTransferSeed[i+1] = aSeed[i];
             }
-            afterTransferSeed[0] = finalXor;
+            afterTransferSeed[0] = newBit;
             result[t] = aSeed[n-1];
             copyingArrayWithoutLink(aSeed, afterTransferSeed);
         }
@@ -27,7 +27,7 @@ public class GeneratorBSK {
 
     }
 
-    private static boolean countingXor(boolean[] aPolynomial, boolean[] aSeed) {
+    private static boolean countingXorForNewGeneratedBit(boolean[] aPolynomial, boolean[] aSeed) {
         boolean finalXor = false;
         for (int i = 0; i < aPolynomial.length; i++)
             if(aPolynomial[i]) finalXor ^= aSeed[i];
