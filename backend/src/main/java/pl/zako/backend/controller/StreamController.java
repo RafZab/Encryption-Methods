@@ -10,7 +10,7 @@ import java.util.Arrays;
 @RestController
 public class StreamController {
 
-    @GetMapping("/stream/encode/{message}")
+    @PostMapping("/stream/encode/{message}")
     public String getBitsInStringFormatFromMessage(@PathVariable("message") String aMessage, @RequestBody GeneratorBSK aGeneratorBSK) {
         String bitsInStringFormat = convertStringIntoBits(aMessage);
         aGeneratorBSK.setTrial(bitsInStringFormat.length());
@@ -22,7 +22,7 @@ public class StreamController {
         return convertBooleanArrayIntoBitsInStringFormat(booleanArrayList);
     }
 
-    @GetMapping("/stream/decode/{bits}")
+    @PostMapping("/stream/decode/{bits}")
     public String getMessageFromBitsInStringFormat(@PathVariable("bits") String aBitsInStringFormat, @RequestBody GeneratorBSK aGeneratorBSK) {
         aGeneratorBSK.setTrial(aBitsInStringFormat.length());
         boolean[] booleanArrayList = convertBitsInStringFormatIntoBooleanArray(aBitsInStringFormat);

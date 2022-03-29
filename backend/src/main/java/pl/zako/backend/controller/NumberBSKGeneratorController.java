@@ -12,7 +12,7 @@ public class NumberBSKGeneratorController {
      public static final boolean _1 = true;
      public static final boolean _0 = false;
 
-    @GetMapping("/generator/random")
+    @PostMapping("/generator/random")
     public boolean[] getPseudoGeneratedArray(@RequestBody GeneratorBSK aGeneratorBSK){
 //        boolean[] polynomial = {_1, _0, _0, _1};
 //        boolean[] seed = {_0, _1, _1, _0};
