@@ -1,7 +1,7 @@
 package pl.zako.backend.controller;
 
 import org.springframework.web.bind.annotation.*;
-import pl.zako.backend.DTO.GeneratorBSK;
+import pl.zako.backend.DTO.GeneratorBskDto;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -11,11 +11,11 @@ import java.util.Arrays;
 public class StreamController {
 
     @PostMapping("/stream/encode/{message}")
-    public String getBitsInStringFormatFromMessage(@PathVariable("message") String aMessage, @RequestBody GeneratorBSK aGeneratorBSK) {
+    public String getBitsInStringFormatFromMessage(@PathVariable("message") String aMessage, @RequestBody GeneratorBskDto aGeneratorBskDto) {
         String bitsInStringFormat = convertStringIntoBits(aMessage);
-        aGeneratorBSK.setTrial(bitsInStringFormat.length());
+        aGeneratorBskDto.setTrial(bitsInStringFormat.length());
         boolean[] booleanArrayList = convertBitsInStringFormatIntoBooleanArray(bitsInStringFormat);
-        boolean[] generatedBooleanArray = GeneratorBSK.code(aGeneratorBSK);
+        boolean[] generatedBooleanArray = GeneratorBskDto.code(aGeneratorBskDto);
         for (int i = 0; i < booleanArrayList.length; i++) {
             booleanArrayList[i] = xor(booleanArrayList[i],generatedBooleanArray[i]);
         }
@@ -23,10 +23,10 @@ public class StreamController {
     }
 
     @PostMapping("/stream/decode/{bits}")
-    public String getMessageFromBitsInStringFormat(@PathVariable("bits") String aBitsInStringFormat, @RequestBody GeneratorBSK aGeneratorBSK) {
-        aGeneratorBSK.setTrial(aBitsInStringFormat.length());
+    public String getMessageFromBitsInStringFormat(@PathVariable("bits") String aBitsInStringFormat, @RequestBody GeneratorBskDto aGeneratorBskDto) {
+        aGeneratorBskDto.setTrial(aBitsInStringFormat.length());
         boolean[] booleanArrayList = convertBitsInStringFormatIntoBooleanArray(aBitsInStringFormat);
-        boolean[] generatedBooleanArray = GeneratorBSK.code(aGeneratorBSK);
+        boolean[] generatedBooleanArray = GeneratorBskDto.code(aGeneratorBskDto);
         for (int i = 0; i < booleanArrayList.length; i++) {
             booleanArrayList[i] = xor(booleanArrayList[i],generatedBooleanArray[i]);
         }
