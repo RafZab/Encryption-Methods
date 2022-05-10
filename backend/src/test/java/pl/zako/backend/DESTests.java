@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @SpringBootTest
 public class DESTests {
-    final String msg = "Witajcie";
+    final String msg = "Wi";
 
     @Test
     public void mainDesAlgorithmTest() {
@@ -31,13 +31,13 @@ public class DESTests {
         GeneratorBskDto aGeneratorBskDto = new GeneratorBskDto(64);
         String aKeyIn0And1Format = GeneratorBskDto.codeAndReturnString(aGeneratorBskDto);
 
-        String encoded = DesDto.encode(msg+"123", aKeyIn0And1Format);
+        String encoded = DesDto.encode(msg+"12jk3n2jck5n5nr32nkj3kn3zenkk3", aKeyIn0And1Format);
         System.out.println("encoded = " + encoded);
 
         String decoded = DesDto.decode(encoded, aKeyIn0And1Format);
         System.out.println("decoded = " + decoded);
 
-        assertEquals(msg+"123", decoded);
+        assertEquals(msg+"12jk3n2jck5n5nr32nkj3kn3zenkk3", decoded);
     }
 
     @Test
