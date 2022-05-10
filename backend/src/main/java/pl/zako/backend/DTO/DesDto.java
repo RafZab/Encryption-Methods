@@ -172,16 +172,23 @@ public class DesDto {
             String resultString = String.valueOf(mergeArrays(left_half, right_half));
             resultStringBuilder.append(permute(resultString, initialPermutation_minus_one));
         }
-        return convertBytesIntoString(resultStringBuilder.toString()).trim();
+        String resultWithTooManyBytes = convertBytesIntoString(resultStringBuilder.toString());
+
+        // delete unnecessary bits basing on last character which is number of bytes to delete
+        int length = resultWithTooManyBytes.length();
+        char lastChar = resultWithTooManyBytes.charAt(length -1);
+        int numberOfCharsToRemove = Integer.parseInt(String.valueOf(lastChar));
+        return resultWithTooManyBytes.substring(0, length - numberOfCharsToRemove - 8);
     }
 
     public static String encode(String aMessageToEncode, String aKey) {
 
-        // adding spaces in order to make it work
+        // adding additional bytes and last with number of added ones
         StringBuilder msgToFillWithSpaces = new StringBuilder(aMessageToEncode);
         int amountOfSpaceToAdd = 8 - (aMessageToEncode.length()%8);
         if(aMessageToEncode.length()%8 == 0) amountOfSpaceToAdd = 0;
-        msgToFillWithSpaces.append(" ".repeat(amountOfSpaceToAdd));
+        msgToFillWithSpaces.append(" ".repeat(amountOfSpaceToAdd+7));
+        msgToFillWithSpaces.append(amountOfSpaceToAdd);
 
         // converting to binary form
         String text_in_1_and_0 = convertStringToBinary(msgToFillWithSpaces.toString());
