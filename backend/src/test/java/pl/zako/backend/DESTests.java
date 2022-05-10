@@ -6,6 +6,7 @@ import pl.zako.backend.DTO.DesDto;
 import pl.zako.backend.DTO.GeneratorBskDto;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @SpringBootTest
 public class DESTests {
@@ -23,6 +24,18 @@ public class DESTests {
         System.out.println("decoded = " + decoded);
 
         assertEquals(msg, decoded);
+    }
+
+    @Test
+    public void generatorKeyTest(){
+        GeneratorBskDto aGeneratorBskDto = new GeneratorBskDto(64);
+        String aKey1 = GeneratorBskDto.codeAndReturnString(aGeneratorBskDto);
+        String aKey2 = GeneratorBskDto.codeAndReturnString(aGeneratorBskDto);
+        String aKey3 = GeneratorBskDto.codeAndReturnString(aGeneratorBskDto);
+        String aKey4 = GeneratorBskDto.codeAndReturnString(aGeneratorBskDto);
+
+        assertNotEquals(aKey1, aKey2);
+        assertNotEquals(aKey3, aKey4);
     }
 
     @Test
