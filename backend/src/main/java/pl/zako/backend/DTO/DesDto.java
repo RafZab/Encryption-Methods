@@ -172,12 +172,19 @@ public class DesDto {
             String resultString = String.valueOf(mergeArrays(left_half, right_half));
             resultStringBuilder.append(permute(resultString, initialPermutation_minus_one));
         }
-        return convertBytesIntoString(resultStringBuilder.toString());
+        return convertBytesIntoString(resultStringBuilder.toString()).trim();
     }
 
     public static String encode(String aMessageToEncode, String aKey) {
-        // initializing
-        String text_in_1_and_0 = convertStringToBinary(aMessageToEncode);
+
+        // adding spaces in order to make it work
+        StringBuilder msgToFillWithSpaces = new StringBuilder(aMessageToEncode);
+        int amountOfSpaceToAdd = 8 - (aMessageToEncode.length()%8);
+        if(aMessageToEncode.length()%8 == 0) amountOfSpaceToAdd = 0;
+        msgToFillWithSpaces.append(" ".repeat(amountOfSpaceToAdd));
+
+        // converting to binary form
+        String text_in_1_and_0 = convertStringToBinary(msgToFillWithSpaces.toString());
         StringBuilder resultStringBuilder = new StringBuilder();
 
         // step 0 - parting on 8 bytes blocks

@@ -27,6 +27,20 @@ public class DESTests {
     }
 
     @Test
+    public void mainDesAlgorithmTestAdvanced() {
+        GeneratorBskDto aGeneratorBskDto = new GeneratorBskDto(64);
+        String aKeyIn0And1Format = GeneratorBskDto.codeAndReturnString(aGeneratorBskDto);
+
+        String encoded = DesDto.encode(msg+"123", aKeyIn0And1Format);
+        System.out.println("encoded = " + encoded);
+
+        String decoded = DesDto.decode(encoded, aKeyIn0And1Format);
+        System.out.println("decoded = " + decoded);
+
+        assertEquals(msg+"123", decoded);
+    }
+
+    @Test
     public void generatorKeyTest(){
         GeneratorBskDto aGeneratorBskDto = new GeneratorBskDto(64);
         String aKey1 = GeneratorBskDto.codeAndReturnString(aGeneratorBskDto);
