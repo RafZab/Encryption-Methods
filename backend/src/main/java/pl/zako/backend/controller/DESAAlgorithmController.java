@@ -2,6 +2,7 @@ package pl.zako.backend.controller;
 
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import pl.zako.backend.DTO.DesDto;
@@ -16,13 +17,13 @@ public class DESAAlgorithmController {
         return GeneratorBskDto.codeAndReturnString(aGeneratorBskDto);
     }
 
-    @GetMapping("/DES/encode")
-    public String encode(@RequestBody String aMessage, String aKey){
+    @GetMapping("/DES/encode/{message}")
+    public String encode(@PathVariable("message") String aMessage, @RequestBody String aKey){
         return DesDto.encode(aMessage, aKey);
     }
 
-    @GetMapping("/DES/decode")
-    public String decode(@RequestBody String aBitsToDecode, String aKey){
+    @GetMapping("/DES/decode/{bits}")
+    public String decode(@PathVariable("bits") String aBitsToDecode, @RequestBody String aKey){
         return DesDto.decode(aBitsToDecode, aKey);
     }
 }
