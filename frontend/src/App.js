@@ -403,6 +403,42 @@ function App() {
         });
     }
 
+    // DES
+
+    const [decodeDES, setDecodeDES] = useState('')
+    const [encodeDES, setEncodeDES] = useState('')
+
+    const onChangeDecodeDES = (value) => {
+        setDecodeDES(value)
+        code_BSK4_zad4(value)
+    }
+
+    const onChangeEncodeDES = (value) => {
+        setEncodeDES(value)
+        encode_BSK4_zad4(value)
+    }
+
+
+    function code_BSK4_zad4(message) {
+        const key = "0110010001111010110010001111010110010001111010110010001111010110"
+        axios.get('http://localhost:8888/DES/encode/' + message + '/' + key).then((response) => {
+            setEncodeDES(response.data)
+        }).catch(function (error) {
+            console.log(error);
+        });
+    }
+
+    function encode_BSK4_zad4(message) {
+        const key = "0110010001111010110010001111010110010001111010110010001111010110"
+        axios.get('http://localhost:8888/DES/decode/' + message + '/' + key).then((response) => {
+            setDecodeDES(response.data)
+        }).catch(function (error) {
+            console.log(error);
+        });
+    }
+
+
+
     return (
         <Container>
             <Card className="mt-3" style={{background : "#C0C0C0"}}>
@@ -703,6 +739,39 @@ function App() {
                                               rows="5"
                                               value={decodeSignatureCodeSTREAM}
                                               onChange={(e) => onChangeDecodeSignatureCodeSTREAM(e.target.value)}
+                                    />
+                                </div>
+                            </Col>
+                        </Row>
+                    </Card>
+                </Container>
+
+
+                <Container className="p-5">
+                    <Card style={{boxShadow : "10px 10px #808080"}}>
+                        <Stack className="pt-4">
+                            <h2 className="d-flex justify-content-center">DES</h2>
+                        </Stack>
+                        <hr/>
+                        <Row>
+                            <Col>
+                                <div className="m-3">
+                                    <h3>Encoded</h3>
+                                    <textarea className="form-control"
+                                              rows="5"
+                                              value={encodeDES}
+                                              onChange={(e) => onChangeEncodeDES(e.target.value)}
+
+                                    />
+                                </div>
+                            </Col>
+                            <Col>
+                                <div className="m-3">
+                                    <h3>Decoded</h3>
+                                    <textarea className="form-control"
+                                              rows="5"
+                                              value={decodeDES}
+                                              onChange={(e) => onChangeDecodeDES(e.target.value)}
                                     />
                                 </div>
                             </Col>
