@@ -34,7 +34,7 @@ public class StreamController {
         return resultMessage;
     }
 
-    private String convertBitsInStringFormatIntoStringMessage(boolean[] aBooleanArrayList) {
+    public String convertBitsInStringFormatIntoStringMessage(boolean[] aBooleanArrayList) {
         char[] chartsArray = new char[aBooleanArrayList.length];
         for (int i = 0; i < aBooleanArrayList.length; i++) {
             if(aBooleanArrayList[i]) chartsArray[i] = '1';
@@ -42,6 +42,7 @@ public class StreamController {
         }
         String text = String.valueOf(chartsArray);
         String result = new String(new BigInteger(text, 2).toByteArray());
+        //convertStringToBinary
         return result;
     }
 
@@ -57,7 +58,7 @@ public class StreamController {
         return booleanArray;
     }
 
-    private static String convertBooleanArrayIntoBitsInStringFormat(boolean[] aBooleanArray){
+    public static String convertBooleanArrayIntoBitsInStringFormat(boolean[] aBooleanArray){
         StringBuilder stringBuilder = new StringBuilder();
         for (boolean bool : aBooleanArray) {
             if(bool) stringBuilder.append(1);

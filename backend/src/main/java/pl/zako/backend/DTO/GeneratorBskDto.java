@@ -1,6 +1,12 @@
 package pl.zako.backend.DTO;
 
 import lombok.Data;
+import pl.zako.backend.controller.StreamController;
+
+import java.math.BigInteger;
+
+import static pl.zako.backend.controller.NumberBSKGeneratorController._0;
+import static pl.zako.backend.controller.NumberBSKGeneratorController._1;
 
 @Data
 public class GeneratorBskDto {
@@ -8,11 +14,13 @@ public class GeneratorBskDto {
     boolean[] polynomial;
     boolean[] seed;
 
-    public GeneratorBskDto(){
-
+    public GeneratorBskDto(int aTrial) {
+        this.polynomial = new boolean[]{_1, _0, _0, _1};
+        this.seed = new boolean[]{_0, _1, _1, _0};
+        this.trial = aTrial;
     }
 
-    public GeneratorBskDto(int trial, boolean[] polynomial, boolean[] seed ){
+    public GeneratorBskDto(int trial, boolean[] polynomial, boolean[] seed) {
         this.polynomial = polynomial;
         this.seed = seed;
         this.trial = trial;
@@ -27,22 +35,30 @@ public class GeneratorBskDto {
 
         for (int t = 0; t < aTrials; t++) {
             newBit = countingXorForNewGeneratedBit(aPolynomial, aSeed);
-            for (int i = 0; i < n-1; i++) {
-                afterTransferSeed[i+1] = aSeed[i];
+            for (int i = 0; i < n - 1; i++) {
+                afterTransferSeed[i + 1] = aSeed[i];
             }
             afterTransferSeed[0] = newBit;
-            result[t] = aSeed[n-1];
+            result[t] = aSeed[n - 1];
             copyingArrayWithoutLink(aSeed, afterTransferSeed);
         }
 
         return result;
+    }
 
+    public static String codeAndReturnString(int aTrials, boolean[] aPolynomial, boolean[] aSeed) {
+        boolean[] result = code(aTrials, aPolynomial, aSeed);
+        return new StreamController().convertBooleanArrayIntoBitsInStringFormat(result);
+    }
+
+    public static String codeAndReturnString(GeneratorBskDto aGeneratorBskDto) {
+        return codeAndReturnString(aGeneratorBskDto.getTrial(), aGeneratorBskDto.getPolynomial(), aGeneratorBskDto.getSeed());
     }
 
     private static boolean countingXorForNewGeneratedBit(boolean[] aPolynomial, boolean[] aSeed) {
         boolean finalXor = false;
         for (int i = 0; i < aPolynomial.length; i++)
-            if(aPolynomial[i]) finalXor ^= aSeed[i];
+            if (aPolynomial[i]) finalXor ^= aSeed[i];
         return finalXor;
     }
 
