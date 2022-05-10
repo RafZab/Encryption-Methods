@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @SpringBootTest
 public class DESTests {
-    final String msg = "Wi";
+    final String msg = "Witajcie";
 
     @Test
     public void mainDesAlgorithmTest() {
